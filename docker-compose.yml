@@ -1,0 +1,32 @@
+version: "3.8"
+services:
+  game-nginx:
+    depends_on:
+      - game-php-fpm
+    restart: always
+    container_name: game-nginx
+    ports:
+      - "8443:443"
+      - "880:80"
+    networks:
+      game-app:
+        aliases:
+          - game-nginx
+    build:
+      context: ./nginx
+      dockerfile: ./Dockerfile
+  game-php-fpm:
+    restart: always
+    container_name: game-php-fpm
+    volumes:
+      - ./php/app:/www
+    networks:
+      game-app:
+        aliases:
+          - game-php-fpm
+    build:
+      context: ./php
+      dockerfile: ./Dockerfile
+networks:
+  game-app:
+    name: game-app
