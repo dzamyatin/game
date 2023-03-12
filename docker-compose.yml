@@ -5,6 +5,8 @@ services:
       - game-php-fpm
     restart: always
     container_name: game-nginx
+    volumes:
+      - ./nginx/nginx.conf:/etc/nginx/nginx.conf
     ports:
       - "8443:443"
       - "880:80"
