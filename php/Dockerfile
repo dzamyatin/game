@@ -5,6 +5,7 @@ USER root
 RUN apt-get update -y; \
     printf "8\n34" | apt-get install -y tzdata; \
     apt-get install -y \
+    libzip-dev \
     pkg-config \
     build-essential \
     autoconf \
@@ -37,12 +38,13 @@ RUN cd php-8.1.13 && \
     --with-openssl \
     --enable-fpm \
     --with-fpm-user=root \
+    -with-zip \
      && \
     make -j4 && \
     make install
 
-COPY ./php-fpm.conf /usr/local/etc/php-fpm.conf
-COPY ./php-fpm.d/www.conf /usr/local/etc/php-fpm.d/www.conf
+COPY ./php/php-fpm.conf /usr/local/etc/php-fpm.conf
+COPY ./php/php-fpm.d/www.conf /usr/local/etc/php-fpm.d/www.conf
 
 COPY ./app /www
 

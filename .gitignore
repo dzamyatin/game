@@ -1,1 +1,3 @@
 .idea
+nginx/cert.pem
+nginx/key.pem
