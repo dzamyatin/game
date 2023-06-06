@@ -6,4 +6,6 @@ COPY ./nginx/fastcgi_params /etc/nginx/fastcgi_params
 COPY ./nginx/cert.pem /etc/nginx/cert.pem
 COPY ./nginx/key.pem /etc/nginx/key.pem
 
-COPY ./app /www
+COPY ./backend /www
+
+WORKDIR /www

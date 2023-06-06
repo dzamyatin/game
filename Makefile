@@ -1,6 +1,6 @@
 dev:
 	make -s cert
-	make -s authority
+	@make -s authority
 	make build
 	make up
 	ARGS=install make composer
@@ -15,6 +15,10 @@ dphp:
 	docker exec -ti game-php-fpm bash
 dnginx:
 	docker exec -ti game-nginx bash
+dnode:
+	docker exec -ti game-node bash
+lnode:
+	docker logs -f game-node
 lphp:
 	docker logs -f game-php-fpm
 lnginx:
@@ -25,9 +29,13 @@ cert:
 authority:
 	sudo sh -c "rm -f /usr/local/share/ca-certificates/game-local*.crt | cp ./nginx/cert.pem /usr/local/share/ca-certificates/game-local`date +%s`.crt && update-ca-certificates"
 composer:
-	docker exec -ti game-php-fpm sh -c "php -r \"copy('https://getcomposer.org/installer', 'composer-setup.php');\" \
+	docker exec -ti game-php-fpm sh -c "cd / && php -r \"copy('https://getcomposer.org/installer', 'composer-setup.php');\" \
 && php composer-setup.php && php -r \"unlink('composer-setup.php');\"; \
 apt-get update && \
 apt install -y git && \
 cd /www && \
 php ../composer.phar $(ARGS)"
+front:
+	docker exec -ti game-node sh -c "npm install && npm run dev"
+kill_front:
+	docker exec -ti game-node sh -c "ps -ax | grep npm | awk '{print $$1}' | xargs kill -9"

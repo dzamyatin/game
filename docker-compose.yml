@@ -1,35 +1,49 @@
 version: "3.8"
 services:
-  game-nginx:
+  nginx:
     depends_on:
-      - game-php-fpm
+      - php-fpm
+      - node
     restart: always
-    container_name: game-nginx
+    container_name: ${PROJECT_NAME}-nginx
     volumes:
       - ./nginx/nginx.conf:/etc/nginx/nginx.conf
-      - ./app:/www
+      - ./backend:/www
     ports:
+      - "${DEV_FRONTEND_PORT}:9999"
       - "${SSL_EXTERNAL_PORT}:443"
       - "${HTTP_EXTERNAL_PORT}:80"
     networks:
-      game-app:
+      app:
         aliases:
-          - game-nginx
+          - nginx
     build:
       context: ./
       dockerfile: ./nginx/Dockerfile
-  game-php-fpm:
+  php-fpm:
     restart: always
-    container_name: game-php-fpm
+    container_name: ${PROJECT_NAME}-php-fpm
     volumes:
-      - ./app:/www
+      - ./backend:/www
     networks:
-      game-app:
+      app:
         aliases:
-          - game-php-fpm
+          - php-fpm
     build:
       context: ./
       dockerfile: ./php/Dockerfile
+  node:
+    restart: always
+    container_name: ${PROJECT_NAME}-node
+    volumes:
+      - ./frontend:/www
+    build:
+      context: ./
+      dockerfile: ./node/Dockerfile
+    networks:
+      app:
+        aliases:
+          - node
 networks:
-  game-app:
-    name: game-app
+  app:
+    name: "${PROJECT_NAME}-app"

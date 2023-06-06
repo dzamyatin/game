@@ -46,10 +46,10 @@ RUN cd php-8.1.13 && \
 COPY ./php/php-fpm.conf /usr/local/etc/php-fpm.conf
 COPY ./php/php-fpm.d/www.conf /usr/local/etc/php-fpm.d/www.conf
 
-COPY ./app /www
+COPY ./backend /www
 
 #RUN mkdir -p /var/run/
-#WORKDIR /www
+WORKDIR /www
 
 #CMD while true; do echo "hello" --verbose; sleep 1; done
 
