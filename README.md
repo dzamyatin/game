@@ -14,3 +14,8 @@ make cert
 sudo sh -c 'rm -f /usr/local/share/ca-certificates/game-local.crt | cp ./nginx/cert.pem /usr/local/share/ca-certificates/game-local.crt'
 sudo update-ca-certificates
 ```
+
+Adminer
+```
+/adminer/
+```

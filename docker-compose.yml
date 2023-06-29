@@ -4,6 +4,7 @@ services:
     depends_on:
       - php-fpm
       - node
+      - adminer
     restart: always
     container_name: ${PROJECT_NAME}-nginx
     volumes:
@@ -32,6 +33,29 @@ services:
     build:
       context: ./
       dockerfile: ./php/Dockerfile
+  postgres:
+    restart: always
+    container_name: ${PROJECT_NAME}-postgres
+    environment:
+      POSTGRES_PASSWORD: password
+#      POSTGRES_USER: user
+#      POSTGRES_DB: postgres
+    volumes:
+      - ./postgres/data:/home/user/data
+    build:
+      context: ./
+      dockerfile: ./postgres/Dockerfile
+    networks:
+      app:
+        aliases:
+          - postgres
+  adminer:
+    image: adminer
+    restart: always
+    networks:
+      app:
+        aliases:
+          - adminer
   node:
     restart: always
     container_name: ${PROJECT_NAME}-node
